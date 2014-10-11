@@ -1,35 +1,133 @@
-HOST: http://www.fraus.cz/
+FORMAT: 1A
+HOST: https://www.mcdonalds.cz
 
---- Frauser API v0.1 ---
----
-Popis rozhraní pro práci s Frausery
----
+# MCD API
+Monet+ API for MCD
 
---
-Frausery
-Tato sekce popisuje rozhraní pro práci s Frausery
---
-Zobrazení Frauseru dle jeho id
-GET /frauser/{id}
-< 200
-< Content-Type: application/json
-{ "items": [
-{ "url": "/frauser/1", "frauserId":"2ZY48XPZ", "metadata": {"name" : "frauser", "created": "30.9.2013"}}
-] }
+Typical API response:
+
++ 200 OK
++ 400 BAD REQ
++ 410 GONE
++ 404 NOT FOUND
++ 500 INTERNAL ERROR
+
+# Group Login
+
+API for gift card registration and client login.
+
+## Client registration and login [/client-api/client-login]
+
+### Gift card registration [POST]
+This method should be used once for client registration. 
+After successfull registration client receives e-mail with confirmation link. 
+When confirmed, user receives e-mail with password. Each subsequent call should contain
+e-mail (username) and password HTTP Basic authentication header.
+
++ Request (application/json)
+
+        {
+            "cln":"1234567890123456", 
+            "activationCode":"ABCDEFGH",
+            "email":"uzivatel@email.cz"
+        }
+        
++ Response 200
+
+# Group User account
+
+## User account settings [/client-api/account]
+
+### Query for account settings [POST]
+
++ Request (application/json)
+
+        {
+            "newPassword":"heslo", 
+            "firstName":"Franta", 
+            "lastName":"Jetel", 
+            "birthDate":"19950101",
+            "phoneNumber":"+420 123 456 789", 
+            "address":"vsechny polozky adresy v jednom? viz navrh designu ...", 
+            "sex":"M"
+        }
+        
++ Response 200
 
 
-Uloženi frauseru
-POST /frauser
-> Content-Type: application/json
-{ "frauserId":"1AB23ORM", "quantity": 2 }
-< 201
-< Content-Type: application/json
-{ "status": "created", "url": "/shopping-cart/2" }
+# Group Gift card
 
+## User account balance [/client-api/card/balance]
 
--- Payment Resources --
-This resource allows you to submit payment information to process your *shopping cart* items
-POST /payment
-{ "cc": "12345678900", "cvc": "123", "expiry": "0112" }
-< 200
-{ "receipt": "/payment/receipt/1" }
+### Current user acount balance [POST]
+
++ Request (application/json)
+        
+        {
+            "cln":"1234567890123456"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "balance":"20000", "currency":"CZK"
+        }
+        
+## Gift card operations [/client-api/card/block]
+
+### Block gift card [POST]
+
++ Request (application/json)
+
+        {
+            "cln":"1234567890123456", 
+            "sendNewCard":true 
+        }
+
++ Response 200 (application/json)
+
+        {}
+
+## Gift card activation [/client-api/card/activation]
+
+### Issue request for new gift card
+
++ Request (application/json)
+
+        {
+            "cln":"1234567890123456", 
+            "activationCode":"ABCDEFGH"
+        }
+
++ Response 200
+
+# Group Transactions        
+
+## Transaction overview [/client-api/trx]
+
+### Get list of user's latest transactions [POST]
+
++ Request (application/json)
+
+        {
+            "fromDate":"20140101 12:15:00",
+            "toDate":"20140101 12:15:00" 
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "id":"100123456",
+                "amount":"10000",
+                "currency":"CZK",
+                "created":"20140101 12:15:00"
+            },
+            { 
+                "id":"100123654",
+                "amount":"20000",
+                "currency":"CZK",
+                "created":"20140102 18:15:55"
+            }
+        ]
+        
