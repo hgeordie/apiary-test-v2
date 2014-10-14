@@ -1,133 +1,261 @@
 FORMAT: 1A
-HOST: https://www.mcdonalds.cz
+HOST: http://www.mcdonald.cz
 
-# MCD API
-Monet+ API for MCD
+# McD Notify
+McD Notify je služba pro předávání změn obsahu stránek společnosti [McDonald](http://www.mcdonald.cz) do infrastruktury společnosti Anywhere. Data jsou následně využívána 
+mobilní aplikací. Předávány jsou tyto informace:
 
-Typical API response:
+1. novinky
+1. restaurace
+1. produkty
+1. vouchery
 
-+ 200 OK
-+ 400 BAD REQ
-+ 410 GONE
-+ 404 NOT FOUND
-+ 500 INTERNAL ERROR
+Informace jsou předávány v okamžiku jejich zveřejnění na www.mcdonald.cz. Předání navazuje na publikační proces a sdílí stejná data. Pokud tedy dojde např. ke zveřejnění novinky, 
+obsah novinky je následně předán přes McD Notify. V případě, že je upravováno více informací současně (např. změny v nutričních hodnotách více produktů a publikování celého seznamu),
+jsou změněná data předávána postupným voláním API pro každou položku.
 
-# Group Login
+## Data obsahu
+Informace jsou předávány ve formátu *json*. Každý záznam je identifikován *ID*, které je unikátní pro daný typ záznamu (např. mezi restauracemi). 
+Dále záznam obsahuje datum poslední změny a další specifické informace.
 
-API for gift card registration and client login.
+### Novinky
 
-## Client registration and login [/client-api/client-login]
-
-### Gift card registration [POST]
-This method should be used once for client registration. 
-After successfull registration client receives e-mail with confirmation link. 
-When confirmed, user receives e-mail with password. Each subsequent call should contain
-e-mail (username) and password HTTP Basic authentication header.
-
-+ Request (application/json)
-
-        {
-            "cln":"1234567890123456", 
-            "activationCode":"ABCDEFGH",
-            "email":"uzivatel@email.cz"
-        }
-        
-+ Response 200
-
-# Group User account
-
-## User account settings [/client-api/account]
-
-### Query for account settings [POST]
-
-+ Request (application/json)
-
-        {
-            "newPassword":"heslo", 
-            "firstName":"Franta", 
-            "lastName":"Jetel", 
-            "birthDate":"19950101",
-            "phoneNumber":"+420 123 456 789", 
-            "address":"vsechny polozky adresy v jednom? viz navrh designu ...", 
-            "sex":"M"
-        }
-        
-+ Response 200
+    {
+        id : 1,
+        created : "3.2.2012 13:13:06",
+        updated: "14.2.2012 11:17:17",
+        title : "McDonald's otevřel první restauraci ve Frýdku-Místku",
+        subtitle : "",
+        perex : "Společnost McDonald's slavnostně otevřela první restauraci ve Frýdku-Místku v ulici Na Příkopě.",
+        body : "<p>Včera proběhlo slavnostní otevření restaurace McDonald's ve Frýdku-Místku za přítomnosti mnoha hostů. Zúčastnily se osobnosti z řad zástupců města Frýdek-Místek, podnikatelské sféry, sportovního světa, projekčních a stavebních firem a dalších institucí, které se podílely na výstavbě restaurace, včetně vedení společnosti McDonald's ČR/SR. Jmenujme např. náměstky primátora města Frýdek-Místek pana Libora Kovalu a Mgr. Michala Pobuckého, DiS., hokejisty HC Oceláři Třinec Václava Varaďu a Jana Peterka, ředitele ostravské pobočky Komerční Banky Mgr. Jiřího Mohylu nebo zástupce UniCredit Bank Ing. Marka Luzara.</p>",
+        status : "2",
+    }
 
 
-# Group Gift card
+### Restaurace
 
-## User account balance [/client-api/card/balance]
+    {
+        id : 52,
+        updated: "10.10.2014 10:10:10",
+        region : 10,
+        lat : 50.0511061,
+        lng : 14.4382528,
+        name : "McDonald's",
+        category : "2;8;6;12",
+        address : "Obchodní centrum Arkády Pankrác, Na Pankráci 86, Praha 4 140 00",
+        tel : "725 573 061",
+        fax : "",
+        photo : "http://www.mcdonalds.cz/img/edee/restaurace/52/img_0439.jpg",
+        openingHours : "Po - Pá: 7 - 21,<br>So - Ne: 8 - 21",
+        openingHoursDrive : "",
+        services : "12;2",
+        info : "Nepřijímá stravenky Exit Group."
+    }
 
-### Current user acount balance [POST]
+### Produkty
 
-+ Request (application/json)
-        
-        {
-            "cln":"1234567890123456"
-        }
+    {
+        id : 1,
+        updated: "10.10.2014 10:10:10",
+        title : "Hamburger",
+        perex : "<p>Stálice naší nabídky. Mleté hovězí maso s&nbsp;nakládanou okurkou, kečupem a&nbsp;hořčicí. Pšeničná žemle.</p>",
+        productType : "sandwich",
+        icon : "http://www.mcdonalds.cz/img/u/produkty/sendvice/ico/hamburger.png",
+        photo : "http://www.mcdonalds.cz/img/u/produkty/sendvice/hd/hamburger.png",
+        ingredients : ["Mleté hovězí maso", "Pšeničná žemle", "Kečup", "Hořčice", "Nakládaná okurka", "Cibule" ],
+        nutrition : [{type : "calories", value : "255", label : "kcal"}, {type : "protein", value : "13", label : "bílkoviny"}, {type : "fat", value : "9", label : "tuky"}],
+        allergens : ["Lepek", "Sezam", "Hořčice"]
+    }
 
-+ Response 200 (application/json)
+### Vouchery
 
-        {
-            "balance":"20000", "currency":"CZK"
-        }
-        
-## Gift card operations [/client-api/card/block]
+    {
+        id : 1,
+        updated: "10.10.2014 10:10:10",
+        title : "1 + 1 Chicken McNuggets™ 6 ks",
+        photo : "http://www.mcdonalds.cz/img/cs/novinky/slavte-s-nami-nejvyhodneji/kupony/kupon-01.jpg"
+        start : "1.9.2014",
+        finish : "30.9.2014"
+    }
+    
 
-### Block gift card [POST]
+## Aktualizace záznamů
+Pokud není záznam s *ID* nalezen, vytvoří se nový. Pokud již záznam existuje, dojde k jeho aktualizaci.
 
-+ Request (application/json)
+## Návratové hodnoty
+V případě úspěšného zpracování dat vrací API hodnotu stavu, například *HTTP Response Status 200 OK*. 
 
-        {
-            "cln":"1234567890123456", 
-            "sendNewCard":true 
-        }
+## Chybové stavy
+V případě chyby vrací API jiný stav než *2xx* společně s informací o chybě. Možné stavové kódy jsou *400 BAD REQ, 410 GONE, 404 NOT FOUND, 500 INTERNAL ERROR*.  
 
-+ Response 200 (application/json)
 
-        {}
+Informace obsahuje kód chyby a lokalizovanou chybovou zprávu. Příklad
+    400 Bad Request
+    
+    {
+        code: 10,
+        message: "Neplatný formát dat, chybí povinná položka 'ID'. "
+    }
 
-## Gift card activation [/client-api/card/activation]
 
-### Issue request for new gift card
+## Zabezpečení API
+Komunikace s API je šifrovaná, probíha přes protokol HTTPS. Identifikace uživatele je provedena pomocí HTTP Basic autentizace. Autentizační hlavička je součástí každého odeslaného požadavku
+na API.
 
-+ Request (application/json)
+# Group Restaurace
+API pro předávání aktualizovaného seznamu restaurací.
 
-        {
-            "cln":"1234567890123456", 
-            "activationCode":"ABCDEFGH"
-        }
+## Restaurace [/restaurants/{id}]
 
-+ Response 200
++ Model (application/json)
 
-# Group Transactions        
+    Informace o restauraci a stavu aktualizace
 
-## Transaction overview [/client-api/trx]
-
-### Get list of user's latest transactions [POST]
-
-+ Request (application/json)
-
-        {
-            "fromDate":"20140101 12:15:00",
-            "toDate":"20140101 12:15:00" 
-        }
-
-+ Response 200 (application/json)
-
-        [
+    + Body
+    
             {
-                "id":"100123456",
-                "amount":"10000",
-                "currency":"CZK",
-                "created":"20140101 12:15:00"
-            },
-            { 
-                "id":"100123654",
-                "amount":"20000",
-                "currency":"CZK",
-                "created":"20140102 18:15:55"
+                id : 52,
+                updated: "10.10.2014 10:10:10",
+                region : 10,
+                lat : 50.0511061,
+                lng : 14.4382528,
+                name : "McDonald's",
+                address : "Obchodní centrum Arkády Pankrác, Na Pankráci 86, Praha 4 140 00",
+                tel : "725 573 061",
+                fax : "",
+                photo : "http://www.mcdonalds.cz/img/edee/restaurace/52/img_0439.jpg",
+                openingHours : "Po - Pá: 7 - 21,<br>So - Ne: 8 - 21",
+                openingHoursDrive : "",
+                services : "12;2",
+                info : "Nepřijímá stravenky Exit Group."
             }
-        ]
+    
+
+### Změna / přidání restaurace [POST]
++ Request 
+
+    [Restaurace][]
+
++ Response 200
++ Response 201
+
+### Smazání restaurace [DELETE]
+
++ Parameters
+    + id (string) ... ID restaurace, která má být smazaná.
+
++ Response 204
+
+## Služby [/restaurants/services]
+
+### Číselník služeb nabízených restauracemi [PUT]
+
++ Request (application/json)
+
+        [{
+            id:2,
+            name: "Snídaně"
+        }]
         
++ Response 200
++ Response 201
+
+# Group Novinky
+
+API pro předávání aktualizovaného seznamu novinek.
+
+## Novinky [/news/{id}]
+
+### Změna / přidání  novinky [POST]
+
+Součástí předávané zprávy je i status. Ten nabývá následujících hodnot:
+
+ 1. v přípravě
+ 1. k publikaci
+ 1. ke schválení
+ 1. zrušit zveřejnění
+ 
++ Request (application/json)
+
+        {
+            id : 1,
+            created : "3.2.2012 13:13:06",
+            updated: "14.2.2012 11:17:17",
+            title : "McDonald's otevřel první restauraci ve Frýdku-Místku",
+            subtitle : "",
+            perex : "Společnost McDonald's slavnostně otevřela první restauraci ve Frýdku-Místku v ulici Na Příkopě.",
+            body : "<p>Včera proběhlo slavnostní otevření restaurace McDonald's ve Frýdku-Místku za přítomnosti mnoha hostů. Zúčastnily se osobnosti z řad zástupců města Frýdek-Místek, podnikatelské sféry, sportovního světa, projekčních a stavebních firem a dalších institucí, které se podílely na výstavbě restaurace, včetně vedení společnosti McDonald's ČR/SR. Jmenujme např. náměstky primátora města Frýdek-Místek pana Libora Kovalu a Mgr. Michala Pobuckého, DiS., hokejisty HC Oceláři Třinec Václava Varaďu a Jana Peterka, ředitele ostravské pobočky Komerční Banky Mgr. Jiřího Mohylu nebo zástupce UniCredit Bank Ing. Marka Luzara.</p>",
+            status : "2",
+        }
+
++ Response 200
++ Response 201
+
+### Smazání novinky [DELETE]
+
++ Parameters
+    + id (string) ... ID novinky, která má být smazaná.
+
++ Response 204
+
+
+# Group Produkty
+API pro předávání aktualizovaného seznamu produktů.
+
+## Produkty [/products/{id}]
+
+### Změna / přidání  produktu [POST]
+
++ Request (application/json)
+
+        {
+            id : 1,
+            updated: "10.10.2014 10:10:10",
+            title : "Hamburger",
+            perex : "<p>Stálice naší nabídky. Mleté hovězí maso s&nbsp;nakládanou okurkou, kečupem a&nbsp;hořčicí. Pšeničná žemle.</p>",
+            productType : "sandwich",
+            icon : "http://www.mcdonalds.cz/img/u/produkty/sendvice/ico/hamburger.png",
+            photo : "http://www.mcdonalds.cz/img/u/produkty/sendvice/hd/hamburger.png",
+            ingredients : ["Mleté hovězí maso", "Pšeničná žemle", "Kečup", "Hořčice", "Nakládaná okurka", "Cibule" ],
+            nutrition : [{type : "calories", value : "255", label : "kcal"}, {type : "protein", value : "13"m label : "bílkoviny"}, {type : "fat", value : "9", label : "tuky"}],
+            allergens : ["Lepek", "Sezam", "Hořčice"]
+        }
+
++ Response 200
++ Response 201
+
+### Smazání produktu [DELETE]
+
++ Parameters
+    + id (string) ... ID produktu, který má být smazaný.
+
++ Response 204
+
+# Group Vouchery
+API pro předávání aktualizovaného seznamu voucherů.
+
+## Vouchery [/vouchers/{id}]
+
+### ### Změna / přidání  voucheru [POST]
+
++ Request (application/json)
+
+        {
+            id : 1,
+            updated: "10.10.2014 10:10:10",
+            title : "1 + 1 Chicken McNuggets™ 6 ks",
+            photo : "http://www.mcdonalds.cz/img/cs/novinky/slavte-s-nami-nejvyhodneji/kupony/kupon-01.jpg"
+            start : "1.9.2014",
+            finish : "30.9.2014"
+        }
+
++ Response 200
++ Response 201
+
+### Smazání voucheru [DELETE]
+
++ Parameters
+    + id (string) ... ID voucheru, který má být smazaný.
+
++ Response 204
+
