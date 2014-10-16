@@ -73,9 +73,10 @@ Dále záznam obsahuje datum poslední změny a další specifické informace.
         id : 1,
         updated: "10.10.2014 10:10:10",
         title : "1 + 1 Chicken McNuggets™ 6 ks",
-        photo : "http://www.mcdonalds.cz/img/cs/novinky/slavte-s-nami-nejvyhodneji/kupony/kupon-01.jpg"
-        start : "1.9.2014",
-        finish : "30.9.2014"
+        photo : "http://www.mcdonalds.cz/img/cs/novinky/slavte-s-nami-nejvyhodneji/kupony/kupon-01.jpg",
+        media : ["http://www.mcdonalds.cz/swf/u/novinky/kuponovka/kupon_04.swf"],
+        validFrom : "1.9.2014",
+        validTo : "30.9.2014"
     }
     
 
@@ -234,7 +235,7 @@ API pro předávání aktualizovaného seznamu produktů.
 # Group Vouchery
 API pro předávání aktualizovaného seznamu voucherů.
 
-## Vouchery [/vouchers/{id}]
+## Vouchery [/vouchers/{id]}
 
 ### ### Změna / přidání  voucheru [POST]
 
@@ -244,9 +245,10 @@ API pro předávání aktualizovaného seznamu voucherů.
             id : 1,
             updated: "10.10.2014 10:10:10",
             title : "1 + 1 Chicken McNuggets™ 6 ks",
-            photo : "http://www.mcdonalds.cz/img/cs/novinky/slavte-s-nami-nejvyhodneji/kupony/kupon-01.jpg"
-            start : "1.9.2014",
-            finish : "30.9.2014"
+            photo : "http://www.mcdonalds.cz/img/cs/novinky/slavte-s-nami-nejvyhodneji/kupony/kupon-01.jpg",
+            media : ["http://www.mcdonalds.cz/swf/u/novinky/kuponovka/kupon_04.swf"],
+            validFrom : "1.9.2014",
+            validTo : "30.9.2014"
         }
 
 + Response 200
