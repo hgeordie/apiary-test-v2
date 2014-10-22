@@ -6,6 +6,7 @@ McD Notify je služba pro předávání změn obsahu stránek společnosti [McDo
 mobilní aplikací. Předávány jsou tyto informace:
 
 1. novinky
+1. tiskové zprávy
 1. restaurace
 1. produkty
 1. vouchery
@@ -19,6 +20,17 @@ Informace jsou předávány ve formátu *json*. Každý záznam je identifiková
 Dále záznam obsahuje datum poslední změny a další specifické informace.
 
 ### Novinky
+    {
+        id : 1,
+        created : "20.10.2014 13:13:06",
+        updated: "21.10.2014 11:17:17",
+        title : "Snack It Easy!",
+        photo : "https://www.mcdonalds.cz/img/cs/novinky/snack-it-easy.jpg",
+        url : "https://www.mcdonalds.cz/cs/novinky/snack-it-easy.shtml",
+        status : "2",
+    }
+
+### Tiskové zprávy
 
     {
         id : 1,
@@ -180,12 +192,11 @@ Součástí předávané zprávy je i status. Ten nabývá následujících hodn
 
         {
             id : 1,
-            created : "3.2.2012 13:13:06",
-            updated: "14.2.2012 11:17:17",
-            title : "McDonald's otevřel první restauraci ve Frýdku-Místku",
-            subtitle : "",
-            perex : "Společnost McDonald's slavnostně otevřela první restauraci ve Frýdku-Místku v ulici Na Příkopě.",
-            body : "<p>Včera proběhlo slavnostní otevření restaurace McDonald's ve Frýdku-Místku za přítomnosti mnoha hostů. Zúčastnily se osobnosti z řad zástupců města Frýdek-Místek, podnikatelské sféry, sportovního světa, projekčních a stavebních firem a dalších institucí, které se podílely na výstavbě restaurace, včetně vedení společnosti McDonald's ČR/SR. Jmenujme např. náměstky primátora města Frýdek-Místek pana Libora Kovalu a Mgr. Michala Pobuckého, DiS., hokejisty HC Oceláři Třinec Václava Varaďu a Jana Peterka, ředitele ostravské pobočky Komerční Banky Mgr. Jiřího Mohylu nebo zástupce UniCredit Bank Ing. Marka Luzara.</p>",
+            created : "20.10.2014 13:13:06",
+            updated: "21.10.2014 11:17:17",
+            title : "Snack It Easy!",
+            photo : "https://www.mcdonalds.cz/img/cs/novinky/snack-it-easy.jpg",
+            url : "https://www.mcdonalds.cz/cs/novinky/snack-it-easy.shtml",
             status : "2",
         }
 
@@ -199,6 +210,43 @@ Součástí předávané zprávy je i status. Ten nabývá následujících hodn
 
 + Response 204
 
+# Group Tiskové zprávy
+
+API pro předávání aktualizovaného seznamu tiskových zpráv.
+
+## Tiskové zprávy [/press/{id}]
+
+### Změna / přidání  tiskové zprávy [POST]
+
+Součástí předávané zprávy je i status. Ten nabývá následujících hodnot:
+
+ 1. v přípravě
+ 1. k publikaci
+ 1. ke schválení
+ 1. zrušit zveřejnění
+ 
++ Request (application/json)
+
+        {
+            id : 1,
+            created : "3.2.2012 13:13:06",
+            updated: "14.2.2012 11:17:17",
+            title : "McDonald's otevřel první restauraci ve Frýdku-Místku",
+            subtitle : "",
+            perex : "Společnost McDonald's slavnostně otevřela první restauraci ve Frýdku-Místku v ulici Na Příkopě.",
+            body : "<p>Včera proběhlo slavnostní otevření restaurace McDonald's ve Frýdku-Místku za přítomnosti mnoha hostů. Zúčastnily se osobnosti z řad zástupců města Frýdek-Místek, podnikatelské sféry, sportovního světa, projekčních a stavebních firem a dalších institucí, které se podílely na výstavbě restaurace, včetně vedení společnosti McDonald's ČR/SR. Jmenujme např. náměstky primátora města Frýdek-Místek pana Libora Kovalu a Mgr. Michala Pobuckého, DiS., hokejisty HC Oceláři Třinec Václava Varaďu a Jana Peterka, ředitele ostravské pobočky Komerční Banky Mgr. Jiřího Mohylu nebo zástupce UniCredit Bank Ing. Marka Luzara.</p>",
+            status : "2",
+        }
+
++ Response 200
++ Response 201
+
+### Smazání tiskové zprávy [DELETE]
+
++ Parameters
+    + id (string) ... ID tiskové zprávy, která má být smazaná.
+
++ Response 204
 
 # Group Produkty
 API pro předávání aktualizovaného seznamu produktů.
