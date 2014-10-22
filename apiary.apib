@@ -2,7 +2,7 @@ FORMAT: 1A
 HOST: http://www.mcdonald.cz
 
 # McD Notify
-McD Notify je služba pro předávání změn obsahu stránek společnosti [McDonald](http://www.mcdonald.cz) do infrastruktury společnosti Anywhere. Data jsou následně využívána 
+McD Notify je služba pro předávání změn obsahu stránek společnosti [McDonald CZ](http://www.mcdonald.cz) a [McDonald SK](https://www.mcdonalds.sk/) do infrastruktury společnosti Anywhere. Data jsou následně využívána 
 mobilní aplikací. Předávány jsou tyto informace:
 
 1. novinky
@@ -17,11 +17,12 @@ jsou změněná data předávána postupným voláním API pro každou položku.
 
 ## Data obsahu
 Informace jsou předávány ve formátu *json*. Každý záznam je identifikován *ID*, které je unikátní pro daný typ záznamu (např. mezi restauracemi). 
-Dále záznam obsahuje datum poslední změny a další specifické informace.
+Dále záznam obsahuje datum poslední změny, informaci o jazykové mutaci (*location*) a další specifické informace.
 
 ### Novinky
     {
         id : 1,
+        location : "cz",
         created : "20.10.2014 13:13:06",
         updated: "21.10.2014 11:17:17",
         title : "Snack It Easy!",
@@ -34,6 +35,7 @@ Dále záznam obsahuje datum poslední změny a další specifické informace.
 
     {
         id : 1,
+        location : "cz",
         created : "3.2.2012 13:13:06",
         updated: "14.2.2012 11:17:17",
         title : "McDonald's otevřel první restauraci ve Frýdku-Místku",
@@ -48,6 +50,7 @@ Dále záznam obsahuje datum poslední změny a další specifické informace.
 
     {
         id : 52,
+        location : "cz",
         updated: "10.10.2014 10:10:10",
         region : 10,
         lat : 50.0511061,
@@ -68,10 +71,12 @@ Dále záznam obsahuje datum poslední změny a další specifické informace.
 
     {
         id : 1,
+        location : "cz",
         updated: "10.10.2014 10:10:10",
         title : "Hamburger",
         perex : "<p>Stálice naší nabídky. Mleté hovězí maso s&nbsp;nakládanou okurkou, kečupem a&nbsp;hořčicí. Pšeničná žemle.</p>",
-        productType : "sandwich",
+        type : "sandwich",
+        category : "mcdonalds",
         icon : "http://www.mcdonalds.cz/img/u/produkty/sendvice/ico/hamburger.png",
         photo : "http://www.mcdonalds.cz/img/u/produkty/sendvice/hd/hamburger.png",
         ingredients : ["Mleté hovězí maso", "Pšeničná žemle", "Kečup", "Hořčice", "Nakládaná okurka", "Cibule" ],
@@ -83,6 +88,7 @@ Dále záznam obsahuje datum poslední změny a další specifické informace.
 
     {
         id : 1,
+        location : "cz",
         updated: "10.10.2014 10:10:10",
         title : "1 + 1 Chicken McNuggets™ 6 ks",
         photo : "http://www.mcdonalds.cz/img/cs/novinky/slavte-s-nami-nejvyhodneji/kupony/kupon-01.jpg",
@@ -128,6 +134,7 @@ API pro předávání aktualizovaného seznamu restaurací.
     
             {
                 id : 52,
+                location : "cz",
                 updated: "10.10.2014 10:10:10",
                 region : 10,
                 lat : 50.0511061,
@@ -167,7 +174,10 @@ API pro předávání aktualizovaného seznamu restaurací.
 
         [{
             id:2,
-            name: "Snídaně"
+            location : "cz",
+            name: "Snídaně",
+            description : "V této restauraci se můžete nasnídat...",
+            icon : "https://www.mcdonalds.cz/img/u/map/ico/services/1.png"
         }]
         
 + Response 200
@@ -192,6 +202,7 @@ Součástí předávané zprávy je i status. Ten nabývá následujících hodn
 
         {
             id : 1,
+            location : "cz",
             created : "20.10.2014 13:13:06",
             updated: "21.10.2014 11:17:17",
             title : "Snack It Easy!",
@@ -229,6 +240,7 @@ Součástí předávané zprávy je i status. Ten nabývá následujících hodn
 
         {
             id : 1,
+            location : "cz",
             created : "3.2.2012 13:13:06",
             updated: "14.2.2012 11:17:17",
             title : "McDonald's otevřel první restauraci ve Frýdku-Místku",
@@ -254,15 +266,21 @@ API pro předávání aktualizovaného seznamu produktů.
 ## Produkty [/products/{id}]
 
 ### Změna / přidání  produktu [POST]
+Produkt může být zařazen do jedné a více kategorií dle způsobu nabídky nebo prodeje v restauraci. Dostupné kategorie jsou:
+
+1. mccafe
+1. breakfest
 
 + Request (application/json)
 
         {
             id : 1,
+            location : "cz",
             updated: "10.10.2014 10:10:10",
             title : "Hamburger",
             perex : "<p>Stálice naší nabídky. Mleté hovězí maso s&nbsp;nakládanou okurkou, kečupem a&nbsp;hořčicí. Pšeničná žemle.</p>",
-            productType : "sandwich",
+            type : "sandwich",
+            category : [],
             icon : "http://www.mcdonalds.cz/img/u/produkty/sendvice/ico/hamburger.png",
             photo : "http://www.mcdonalds.cz/img/u/produkty/sendvice/hd/hamburger.png",
             ingredients : ["Mleté hovězí maso", "Pšeničná žemle", "Kečup", "Hořčice", "Nakládaná okurka", "Cibule" ],
@@ -291,6 +309,7 @@ API pro předávání aktualizovaného seznamu voucherů.
 
         {
             id : 1,
+            location : "cz",
             updated: "10.10.2014 10:10:10",
             title : "1 + 1 Chicken McNuggets™ 6 ks",
             photo : "http://www.mcdonalds.cz/img/cs/novinky/slavte-s-nami-nejvyhodneji/kupony/kupon-01.jpg",
