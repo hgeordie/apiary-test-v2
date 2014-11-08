@@ -126,7 +126,7 @@ API pro předávání aktualizovaného seznamu restaurací.
 
 ## Restaurace [/update-restaurant/{id}]
 
-+ Model (application/json)
++ Model
 
     Informace o restauraci a stavu aktualizace
 
@@ -152,13 +152,18 @@ API pro předávání aktualizovaného seznamu restaurací.
     
 
 ### Změna / přidání restaurace [POST]
-+ Request 
++ Request (application/json)
 
     [Restaurace][]
 
-+ Response 200
-+ Response 201
++ Response 200 (application/json)
 
+        {status : "ok"}
+
++ Response 201 (application/json)
+
+        {status : "created"}
+        
 ### Smazání restaurace [DELETE]
 
 + Parameters
